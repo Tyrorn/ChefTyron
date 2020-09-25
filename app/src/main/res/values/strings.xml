@@ -28,4 +28,9 @@
     <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
     <string name="ingredientsAddHint">Enter new Ingredient</string>
     <string name="ingredientsQtyHint">Qty</string>
+    <string name="RecipesButton">Recipes</string>
+    <string name="GroceryListButton">Grocery List</string>
+    <string name="title_activity_recipes_page">RecipesPage</string>
+    <string name="title_activity_grocerylist_page">GrocerylistPage</string>
+    <string name="popuptitle">Enter Grocery Item</string>
 </resources>
