@@ -7,12 +7,20 @@ public class Recipe {
     private ArrayList<Ingredients> ingredientsList;
     private  String instructions;
     private int servingSize;
+    private int time;
+    private int id;
 
-    public Recipe (String name, ArrayList<Ingredients> ingredients, String instructions, int size){
+    public Recipe(){
+
+    }
+
+    public Recipe (String name, ArrayList<Ingredients> ingredients, String instructions, int size, int time, int id){
         this.recipeName = name;
         this.ingredientsList = ingredients;
         this.instructions = instructions;
         this.servingSize = size;
+        this.servingSize = time;
+        this.id = id;
     }
 
     public String getRecipeName() {
@@ -45,5 +53,21 @@ public class Recipe {
 
     public void setServingSize(int servingSize) {
         this.servingSize = servingSize;
+    }
+
+    public int getTime() {
+        return time;
+    }
+
+    public void setTime(int time) {
+        this.time = time;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 }

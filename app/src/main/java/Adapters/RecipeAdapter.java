@@ -1,10 +1,12 @@
 package Adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -19,15 +21,20 @@ import java.util.ArrayList;
 
 import Models.Ingredients;
 import Models.Recipe;
+import Models.onCheckClick;
 
 public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.MyViewHolder> {
 
     private Context context;
     private ArrayList<Recipe> recipes;
+    private ArrayList<Ingredients> ingredientsList;
+    private onCheckClick listener;
 
-    public RecipeAdapter(Context context, ArrayList<Recipe> recipe ){
+    public RecipeAdapter(Context context, ArrayList<Recipe> recipe, onCheckClick listener ){
         this.context = context;
         this.recipes = recipe;
+        this.listener = listener;
+
 
 
     }
@@ -42,7 +49,20 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.MyViewHold
     }
 
     @Override
-    public void onBindViewHolder(@NonNull RecipeAdapter.MyViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull RecipeAdapter.MyViewHolder holder, final int position) {
+        holder.checkbox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                if(compoundButton.isChecked()){
+                    listener.onClick(recipes.get(position).getIngredientsList(), true);
+
+                }
+                else{
+                    listener.onClick(recipes.get(position).getIngredientsList(), false);
+                }
+            }
+        });
+
         holder.rname.setText(recipes.get(position).getRecipeName());
         holder.rSize.setText(Integer.toString(recipes.get(position).getServingSize()));
 

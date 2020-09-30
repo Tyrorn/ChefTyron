@@ -5,7 +5,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -15,15 +17,19 @@ import com.example.cheftyron.R;
 import java.util.ArrayList;
 import java.util.List;
 
+import Database.DataBaseHandler;
 import Models.Ingredients;
+
 
 public class IngredientsAdapter extends RecyclerView.Adapter<IngredientsAdapter.MyViewHolder> {
     private ArrayList<Ingredients>mList;
     private Context mContext;
-
+//    private onUpdateingredients listener;
+//, onUpdateingredients listener
     public IngredientsAdapter(Context context, ArrayList<Ingredients> list){
-        mList = list;
-        mContext = context;
+        this.mList = list;
+        this.mContext = context;
+//        this.listener = listener;
     }
     @NonNull
     @Override
@@ -36,21 +42,36 @@ public class IngredientsAdapter extends RecyclerView.Adapter<IngredientsAdapter.
 
     @Override
     public void onBindViewHolder(@NonNull final IngredientsAdapter.MyViewHolder holder, final int position) {
+
         holder.add.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view) {
+                int index = mList.get(position).getId();
                 int quantity = mList.get(position).getmQuantity();
                 quantity +=1;
                 mList.get(position).setmQuantity(quantity);
+                addItem(position);
                 holder.Qty.setText(Integer.toString(mList.get(position).getmQuantity()));
+
 
             }
         });
+        holder.remove.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                int index = mList.get(position).getId();
+                deleteItem(index);
+                mList.remove(position);
+                notifyDataSetChanged();
 
+
+            }
+        });
         holder.Ingredient.setText(mList.get(position).getmIngredient());
 
         holder.Qty.setText(Integer.toString(mList.get(position).getmQuantity()));
     }
+
 
     @Override
     public int getItemCount() {
@@ -66,10 +87,21 @@ public class IngredientsAdapter extends RecyclerView.Adapter<IngredientsAdapter.
             super(v);
             add = v.findViewById(R.id.ingredientsAdd);
             remove = v.findViewById(R.id.ingredientsRemove);
-
             Ingredient = v.findViewById(R.id.ingredientsItemText);
             Qty = v.findViewById(R.id.ingredientsQuantityText);
 
         }
+    }
+
+    public void addItem(int id){
+        DataBaseHandler db = new DataBaseHandler(mContext);
+        Ingredients ingredients = mList.get(id);
+        db.updateIngredient(ingredients);
+
+    }
+
+    public void deleteItem(int id){
+        DataBaseHandler db = new DataBaseHandler(mContext);
+        db.deleteIngredient(id);
     }
 }

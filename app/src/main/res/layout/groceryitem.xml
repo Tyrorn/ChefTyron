@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:weightSum="100">
+
+    <TextView
+        android:id="@+id/ingredientsItemText"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="60"
+        android:text="@string/ingredientsItemText"
+        android:textSize="25sp"
+        android:textColor="#000"
+        />
+
+    <TextView
+        android:id="@+id/ingredientsQuantityText"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="20"
+        android:text="@string/ingredientsQuantityText"
+        android:textSize="20sp"
+        android:textColor="#000"/>
+
+</LinearLayout>
