@@ -20,7 +20,7 @@
 
     <!--    Ingredients Adapter-->
     <string name="ingredientsItemText">Ingredient Item</string>
-    <string name="ingredientsQuantityText">Quantity</string>
+    <string name="ingredientsQuantityText">Qty</string>
     <string name="ingredientsAdd">Add</string>
     <string name="ingredientsRemove">Remove</string>
 
@@ -33,4 +33,12 @@
     <string name="title_activity_recipes_page">RecipesPage</string>
     <string name="title_activity_grocerylist_page">GrocerylistPage</string>
     <string name="popuptitle">Enter Grocery Item</string>
+    <string name="newRecipeTitle">Add New Recipe</string>
+    <string name="recipeName">Insert Recipe Name</string>
+    <string name="recipeServingSize">Serving Size</string>
+    <string name="recipeCookTime">Cook Time(Minutes)</string>
+    <string name="recipeTextBox">Add Recipe Here</string>
+    <string name="addRecipe">Add Recipe</string>
+    <string name="createGroceries">Create Groceries List</string>
+    <string name="title_activity_create_recipe">createRecipe</string>
 </resources>

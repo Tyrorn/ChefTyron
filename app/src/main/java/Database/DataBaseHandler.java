@@ -230,6 +230,13 @@ public class DataBaseHandler extends SQLiteOpenHelper {
         return list;
 
     }
+    public int getRecipesCount(){
+        String countQuery = "SELECT * FROM " + TABLE_RECIPES;
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        Cursor cursor = db.rawQuery(countQuery,null);
+        return cursor.getCount();
+    }
 
 //    private static final String RKEY_ID = "id";
 //    private static final String RECIPE_INGREDIENT = "recipe_ingredient";

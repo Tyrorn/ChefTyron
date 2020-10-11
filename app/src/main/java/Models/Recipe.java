@@ -14,13 +14,13 @@ public class Recipe {
 
     }
 
-    public Recipe (String name, ArrayList<Ingredients> ingredients, String instructions, int size, int time, int id){
+    public Recipe (String name, ArrayList<Ingredients> ingredients, String instructions, int size, int time){
         this.recipeName = name;
         this.ingredientsList = ingredients;
         this.instructions = instructions;
         this.servingSize = size;
         this.servingSize = time;
-        this.id = id;
+       // this.id = id;
     }
 
     public String getRecipeName() {

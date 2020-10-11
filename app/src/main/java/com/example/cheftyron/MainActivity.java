@@ -1,15 +1,19 @@
 package com.example.cheftyron;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.os.PersistableBundle;
 import android.view.View;
 
 import android.view.Menu;
@@ -45,9 +49,11 @@ public class MainActivity extends AppCompatActivity implements onCheckClick{
     private ArrayList<Ingredients> groceriesList = new ArrayList<>();
     private IngredientsAdapter groceriesAdapter;
 
+    private int adapterUsed;
+
 
     private FloatingActionButton fab ;
-    private ArrayList<Ingredients> testList = new ArrayList<>();
+   // private ArrayList<Ingredients> testList = new ArrayList<>();
 
     private DataBaseHandler db;
 
@@ -58,13 +64,10 @@ public class MainActivity extends AppCompatActivity implements onCheckClick{
         setContentView(R.layout.activity_main);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
-
-
         db = new DataBaseHandler(this);
         rv = findViewById(R.id.rViewMain);
 
-        // Pull data for ingredients and Recipes----------------------------------------------------
+        // Pull data for ingredients----------------------------------------------------
         ArrayList<Ingredients> temp = new ArrayList<>();
         temp = db.getAllIngredients();
         for (Ingredients i : temp){
@@ -74,22 +77,9 @@ public class MainActivity extends AppCompatActivity implements onCheckClick{
             ingredients.setmQuantity(i.getmQuantity());
             ingredientsList.add(ingredients);
         }
-       // ingredientCount = db.IngredientsCount();
 
 
-        testList.add(new Ingredients("eggs", 4,1));
-        testList.add(new Ingredients("milk", 2,2));
-        testList.add(new Ingredients("sausages", 2,3));
-        testList.add(new Ingredients("crater", 2,4));
-        testList.add(new Ingredients("why tho", 3,5));
-
-        //------------------------
-      //  create data for recipes IMPORTANT!!! ----------------------- name, ingredients, instructions, serving size
-//        for (int t = 1;t<6;t++){
-//            db.addRecipe(new Recipe("sample "+t,testList,"test for now", t,30,t));
-//            db.addRecipeIngredients(db.getRecipe(t).getId(),testList);
-//           // recipesList.add(new Recipe("sample "+t,testList,"test for now", t,30,t));
-//        }
+        //Pull Recipes database------------------------------------
         ArrayList<Recipe> temp1;
         temp1 = db.getAllRecipes();
         for (int i=0; i<temp1.size();i++){
@@ -102,17 +92,33 @@ public class MainActivity extends AppCompatActivity implements onCheckClick{
             recipe.setIngredientsList(db.getRecipeIngredients(recipe.getId()));
             recipesList.add(recipe);
         }
-//        for (Recipe i : temp1){
-//
-//        }
-        recipeAdapter = new RecipeAdapter(this, recipesList, this);
-
-
-
         //------------------------------------------------------------
+
+        //set Adapters
         groceriesAdapter = new IngredientsAdapter(this,groceriesList);
         ingredientsAdapter = new IngredientsAdapter(this, ingredientsList);
+        recipeAdapter = new RecipeAdapter(this, recipesList, this);
+        //------------------------------------------------------------
+
         rv.setLayoutManager(new LinearLayoutManager(this));
+
+        //restore adapter state if screen rotates----
+        if(savedInstanceState!=null){
+
+            adapterUsed = savedInstanceState.getInt("ADAPTER_USED");
+            switch(adapterUsed){
+                case 1:
+                    ingredientsInit();
+                    break;
+                case 2:
+                    recipesInit();
+                    break;
+                case 3:
+                    groceriesInit();
+                    break;
+            }
+        }
+        //---------------------------------------------
         init();
     }
 
@@ -126,7 +132,6 @@ public class MainActivity extends AppCompatActivity implements onCheckClick{
         ingredients.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view){
-                rv.setAdapter(ingredientsAdapter);
                 ingredientsInit();
             }
         });
@@ -135,7 +140,6 @@ public class MainActivity extends AppCompatActivity implements onCheckClick{
         recipe.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view){
-                rv.setAdapter(recipeAdapter);
                 recipesInit();
             }
         });
@@ -144,7 +148,7 @@ public class MainActivity extends AppCompatActivity implements onCheckClick{
         groceries.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view){
-                rv.setAdapter(groceriesAdapter);
+
                 groceriesInit();
 
             }
@@ -154,6 +158,11 @@ public class MainActivity extends AppCompatActivity implements onCheckClick{
     }
 
     public void groceriesInit(){
+        //Toast.makeText(MainActivity.this,"whyyy!!!",Toast.LENGTH_SHORT).show();
+        rv.setAdapter(groceriesAdapter);
+        adapterUsed =3;
+        Button button = findViewById(R.id.centerButton);
+        button.setVisibility(View.INVISIBLE);
         fab = findViewById(R.id.fab);
         fab.setVisibility(View.VISIBLE);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -166,9 +175,24 @@ public class MainActivity extends AppCompatActivity implements onCheckClick{
 
     }
     public void recipesInit() {
+        rv.setAdapter(recipeAdapter);
+        adapterUsed =2;
+        recipeAdapter.notifyDataSetChanged();
+
         fab = findViewById(R.id.fab);
         fab.setVisibility(View.VISIBLE);
         fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(MainActivity.this, createRecipe.class);
+                startActivity(intent);
+            }
+        });
+
+        Button button = findViewById(R.id.centerButton);
+        button.setVisibility(View.VISIBLE);
+        button.setText(R.string.createGroceries);
+        button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 createGroceries();
@@ -179,6 +203,11 @@ public class MainActivity extends AppCompatActivity implements onCheckClick{
 
     //Use Ingredients adapter for the Main activity RecyclerView------------------------------------
     void ingredientsInit(){
+        adapterUsed =1;
+
+        rv.setAdapter(ingredientsAdapter);
+        Button button = findViewById(R.id.centerButton);
+        button.setVisibility(View.INVISIBLE);
         fab = findViewById(R.id.fab);
         fab.setVisibility(View.VISIBLE);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -249,6 +278,11 @@ public class MainActivity extends AppCompatActivity implements onCheckClick{
 
 
     // --------------------------------------------------------------------------------------------
+
+    //Recipe Methods
+//    public void createRecipe(){
+//        EditText
+//    }
 
     //Grocery stuff--------------------------------
 
@@ -365,6 +399,30 @@ public class MainActivity extends AppCompatActivity implements onCheckClick{
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+    }
+
+
+    @Override
+    protected void onPause(){
+        super.onPause();
+
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle savedInstanceState) {
+
+        savedInstanceState.putInt("ADAPTER_USED",adapterUsed);
+        super.onSaveInstanceState(savedInstanceState);
+    }
 
 
 }

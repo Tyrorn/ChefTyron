@@ -6,10 +6,10 @@
     android:layout_height="wrap_content">
 
     <androidx.cardview.widget.CardView
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content" >
 
-        <RelativeLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
@@ -17,44 +17,103 @@
                 android:id="@+id/recipeCheckBox"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:padding="26dp"
-                android:text="CheckBox" />
+                android:padding="10dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.0" />
 
             <TextView
                 android:id="@+id/recipeName"
                 android:layout_width="wrap_content"
-                android:layout_toRightOf="@+id/recipeCheckBox"
-                android:layout_toEndOf="@+id/recipeCheckBox"
-                android:textSize="20sp"
                 android:layout_height="wrap_content"
-                android:text="TextView" />
+                android:layout_toEndOf="@+id/recipeCheckBox"
+                android:layout_toRightOf="@+id/recipeCheckBox"
+                android:gravity="center_vertical"
+                android:paddingTop="10dp"
+                android:text="TextView"
+                android:textSize="15sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toEndOf="@+id/recipeCheckBox"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.0" />
+
             <TextView
-                android:id="@+id/recipeSize"
+                android:id="@+id/textView2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/recipeName"
-                android:paddingTop="20dp"
-                android:layout_toRightOf="@+id/recipeCheckBox"
+                android:text="Serves: "
                 android:textStyle="italic"
-                android:layout_toEndOf="@+id/recipeCheckBox"
-                android:text="TextView" />
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.626"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
-            <ImageView
-                android:id="@+id/recipePicture"
-                android:layout_width="118dp"
-                android:layout_height="70dp"
-                android:layout_alignParentEnd="true"
-                android:layout_alignParentRight="true"
-                android:layout_marginStart="90dp"
-                android:layout_marginLeft="90dp"
+            <TextView
+                android:id="@+id/recipeSize"
+                android:layout_width="26dp"
+                android:layout_height="16dp"
                 android:layout_toEndOf="@+id/recipeName"
                 android:layout_toRightOf="@+id/recipeName"
-                tools:srcCompat="@tools:sample/avatars" />
+
+                android:text="Te"
+                android:textStyle="italic"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/textView3"
+                app:layout_constraintHorizontal_bias="1.0"
+                app:layout_constraintStart_toEndOf="@+id/textView2"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.434" />
+
+            <TextView
+                android:id="@+id/textView3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textStyle="italic"
+
+                android:text="Cook Time: "
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/recipeTime"
+                app:layout_constraintHorizontal_bias="1.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/recipeTime"
+                android:layout_width="43dp"
+                android:layout_height="19dp"
+
+
+                android:text="Te"
+                android:textStyle="italic"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="1.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.476" />
+
+            <!--            <ImageView-->
+<!--                android:id="@+id/recipePicture"-->
+<!--                android:layout_width="118dp"-->
+<!--                android:layout_height="70dp"-->
+<!--                android:layout_alignParentEnd="true"-->
+<!--                android:layout_alignParentRight="true"-->
+<!--                android:layout_marginStart="90dp"-->
+<!--                android:layout_marginLeft="90dp"-->
+<!--                android:layout_toEndOf="@+id/recipeName"-->
+<!--                android:layout_toRightOf="@+id/recipeName"-->
+<!--                tools:srcCompat="@tools:sample/avatars" />-->
 
 
 
 
-        </RelativeLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.cardview.widget.CardView>
 </LinearLayout>

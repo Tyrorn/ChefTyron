@@ -65,6 +65,7 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.MyViewHold
 
         holder.rname.setText(recipes.get(position).getRecipeName());
         holder.rSize.setText(Integer.toString(recipes.get(position).getServingSize()));
+        holder.time.setText(Integer.toString(recipes.get(position).getTime()));
 
     }
 
@@ -78,13 +79,15 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.MyViewHold
         public TextView rname;
         public TextView rSize;
         public ImageView image;
+        public TextView time;
 
         public MyViewHolder(@NonNull View v) {
             super(v);
             checkbox = v.findViewById(R.id.recipeCheckBox);
             rname = v.findViewById(R.id.recipeName);
             rSize = v.findViewById(R.id.recipeSize);
-            image = v.findViewById(R.id.recipePicture);
+            time = v.findViewById(R.id.recipeTime);
+           // image = v.findViewById(R.id.recipePicture);
 
         }
     }
