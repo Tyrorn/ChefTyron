@@ -5,66 +5,105 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:weightSum="100">
+    android:weightSum="100"
+    android:shadowColor="#000"
+    android:shadowDx="30"
+    android:shadowDy="60"
+    android:shadowRadius="50">
 
-    <TextView
-        android:id="@+id/ingredientsItemText"
-        android:layout_width="198dp"
-        android:layout_height="38dp"
-        android:layout_weight="60"
-        android:text="@string/ingredientsItemText"
-        android:textColor="#000"
-        android:textSize="25sp"
-        app:layout_constraintBottom_toBottomOf="parent"
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="1.0" />
+        android:layout_margin="3dp">
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
-    <TextView
-        android:id="@+id/ingredientsQuantityText"
-        android:layout_width="44dp"
-        android:layout_height="32dp"
-        android:layout_weight="20"
-        android:text="@string/ingredientsQuantityText"
-        android:textColor="#000"
-        android:textSize="20sp"
-        android:textStyle="italic"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/ingredientsAdd"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toEndOf="@+id/ingredientsItemText"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.4" />
 
-    <Button
-        android:id="@+id/ingredientsAdd"
-        android:layout_width="57dp"
-        android:layout_height="42dp"
-        android:layout_gravity="end"
-        android:layout_weight="10"
-        android:onClick="AddHandler"
-        android:text="@string/ingredientsAdd"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/ingredientsRemove"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0" />
+        <TextView
+            android:id="@+id/ingredientsItemText"
+            android:layout_width="184dp"
+            android:layout_height="36dp"
+            android:layout_weight="60"
+            android:text="@string/ingredientsItemText"
+            android:textColor="#000"
+            android:textSize="20sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.0" />
 
-    <Button
-        android:id="@+id/ingredientsRemove"
-        android:layout_width="60dp"
-        android:layout_height="40dp"
-        android:layout_gravity="end"
-        android:layout_weight="10"
-        android:onClick="ingredientsRemoveHandler"
-        android:text="@string/ingredientsRemove"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0" />
+            <TextView
+                android:id="@+id/ingredientsQuantityText"
+                android:layout_width="44dp"
+                android:layout_height="32dp"
+                android:layout_weight="20"
+                android:gravity="end"
+                android:text="@string/ingredientsQuantityText"
+                android:textAlignment="viewEnd"
+                android:textColor="#000"
+                android:textSize="20sp"
+                android:textStyle="italic"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/ingredientsRemove"
+                app:layout_constraintHorizontal_bias="0.569"
+                app:layout_constraintStart_toEndOf="@+id/ingredientsItemText"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.0" />
+
+            <TextView
+            android:id="@+id/qtyType"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginStart="22dp"
+            android:layout_marginLeft="22dp"
+            android:textSize="20sp"
+                android:textAlignment="viewEnd"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/ingredientsRemove"
+            app:layout_constraintHorizontal_bias="0.09"
+            app:layout_constraintStart_toEndOf="@+id/ingredientsQuantityText"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.0"
+                android:gravity="end" />
+
+            <Button
+                android:id="@+id/ingredientsAdd"
+                android:layout_width="48dp"
+
+                android:layout_height="38dp"
+                android:layout_gravity="end"
+                android:layout_weight="10"
+                android:background="@drawable/plus_sign_foreground"
+                android:onClick="AddHandler"
+
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/ingredientsQuantityText"
+                app:layout_constraintHorizontal_bias="0.493"
+                app:layout_constraintStart_toEndOf="@+id/ingredientsItemText"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.0" />
+
+            <Button
+                android:id="@+id/ingredientsRemove"
+                android:layout_width="46dp"
+                android:layout_height="38dp"
+                android:layout_gravity="end"
+                android:layout_weight="10"
+                android:background="@drawable/minus_sign_foreground"
+                android:onClick="ingredientsRemoveHandler"
+
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="1.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.0" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.cardview.widget.CardView>
 </androidx.constraintlayout.widget.ConstraintLayout>

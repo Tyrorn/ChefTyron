@@ -5,6 +5,7 @@ import android.widget.Button;
 public class Ingredients{
     private String mIngredient;
     private int mQuantity;
+    private String qtyType;
     private boolean mRemove;
     private int id;
 
@@ -17,11 +18,12 @@ public class Ingredients{
     }
 
 
-    public Ingredients(String item, int quantity, int id){
+    public Ingredients(String item, int quantity, int id, String type){
         this.mIngredient = item;
         this.mQuantity = quantity;
         this.id = id;
         this.mRemove = false;
+        this.qtyType = type;
     }
 
 
@@ -65,5 +67,13 @@ public class Ingredients{
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public String getQtyType() {
+        return qtyType;
+    }
+
+    public void setQtyType(String qtyType) {
+        this.qtyType = qtyType;
     }
 }

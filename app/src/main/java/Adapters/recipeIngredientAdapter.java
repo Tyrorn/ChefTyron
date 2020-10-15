@@ -36,6 +36,7 @@ public class recipeIngredientAdapter extends RecyclerView.Adapter<recipeIngredie
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
         holder.name.setText(mList.get(position).getmIngredient());
+        holder.qtyType.setText(mList.get(position).getQtyType());
 
         holder.quantity.setText(Integer.toString(mList.get(position).getmQuantity()));
     }
@@ -49,10 +50,12 @@ public class recipeIngredientAdapter extends RecyclerView.Adapter<recipeIngredie
     public class MyViewHolder extends RecyclerView.ViewHolder {
         public TextView name;
         public TextView quantity;
+        public TextView qtyType;
         public MyViewHolder(@NonNull View v) {
             super(v);
             name = v.findViewById(R.id.ingredientName);
             quantity = v.findViewById(R.id.ingredientQuantity);
+            qtyType = v.findViewById(R.id.qtyType);
 
         }
     }

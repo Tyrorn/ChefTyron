@@ -30,14 +30,30 @@
                 android:gravity="center_horizontal"
 
                 />
+
             <EditText
                 android:id="@+id/ingredientsQuantityText"
-                android:layout_below="@+id/ingredientsAddText"
-                android:layout_width="match_parent"
+                android:layout_width="174dp"
                 android:layout_height="wrap_content"
+                android:layout_below="@+id/ingredientsAddText"
+                android:gravity="center_horizontal"
                 android:hint="@string/ingredientsQtyHint"
-                android:textAlignment="center"
-                android:gravity="center_horizontal"/>
+                android:textAlignment="center" />
+
+            <Spinner
+                android:id="@+id/popUpSpinner"
+                android:layout_width="187dp"
+                android:layout_height="36dp"
+                android:spinnerMode="dropdown"
+                android:layout_above="@+id/popupAdd"
+                android:layout_below="@+id/ingredientsAddText"
+                android:layout_marginStart="0dp"
+                android:layout_marginLeft="0dp"
+                android:layout_marginTop="0dp"
+                android:layout_marginBottom="7dp"
+                android:layout_toEndOf="@id/ingredientsQuantityText"
+                android:layout_toRightOf="@id/ingredientsQuantityText" />
+
             <Button
                 android:id="@+id/popupAdd"
                 android:text="@string/ingredientsAdd"

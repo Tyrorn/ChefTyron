@@ -30,12 +30,14 @@ public class DataBaseHandler extends SQLiteOpenHelper {
     //INGREDIENTS COLUMNS
     private static final String INGREDIENTS_KEY_ID ="id";
     private static final String INGREDIENT_QTY = "ingredient_quantity";
+    private static final String INGREDIENT_QTYTYPE = "ingredient_qtytype";
     private static final String INGREDIENT_NAME = "ingredient_name";
 
     //RECIPE INGREDIENTS COLUMNS
     private static final String RKEY_ID = "id";
     private static final String RECIPE_INGREDIENT = "recipe_ingredient";
     private static final String RECIPE_QTY = "recipe_QTY";
+    private static final String RECIPE_QTYTYPE ="Qty_Type";
     private static final String RECIPE_ID = "recipe_id";
 
 
@@ -58,6 +60,7 @@ public class DataBaseHandler extends SQLiteOpenHelper {
         String Create_table_ingredients = "CREATE TABLE " + TABLE_INGREDIENTS + "("
                 + INGREDIENTS_KEY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
                  + INGREDIENT_NAME + " TEXT,"
+                + INGREDIENT_QTYTYPE + " TEXT,"
                 + INGREDIENT_QTY + " TEXT);";
 
         db.execSQL(Create_table_ingredients);
@@ -78,6 +81,7 @@ public class DataBaseHandler extends SQLiteOpenHelper {
                 + RKEY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
                 + RECIPE_ID + " TEXT,"
                 + RECIPE_QTY + " TEXT,"
+                + RECIPE_QTYTYPE + " TEXT,"
                 + RECIPE_INGREDIENT + " TEXT);";
 
         db.execSQL(Create_table_recipe_ingredients);
@@ -102,6 +106,7 @@ public class DataBaseHandler extends SQLiteOpenHelper {
        // values.put(INGREDIENTS_KEY_ID,newIngredient.getId());
         values.put(INGREDIENT_NAME, newIngredient.getmIngredient());
         values.put(INGREDIENT_QTY, newIngredient.getmQuantity());
+        values.put(INGREDIENT_QTYTYPE,newIngredient.getQtyType());
         db.insert(TABLE_INGREDIENTS,null,values);
 
         Log.d("saved","Saved to DB");
@@ -110,7 +115,7 @@ public class DataBaseHandler extends SQLiteOpenHelper {
     public Ingredients getIngredient(int id){
         SQLiteDatabase db = this.getWritableDatabase();
 
-        Cursor cursor = db.query(TABLE_INGREDIENTS,new String[] {INGREDIENTS_KEY_ID,INGREDIENT_NAME,INGREDIENT_QTY}
+        Cursor cursor = db.query(TABLE_INGREDIENTS,new String[] {INGREDIENTS_KEY_ID,INGREDIENT_NAME,INGREDIENT_QTY,INGREDIENT_QTYTYPE}
         , INGREDIENTS_KEY_ID +"=?",
                 new String[]{String.valueOf(id)},null,null,null);
 
@@ -121,6 +126,7 @@ public class DataBaseHandler extends SQLiteOpenHelper {
             ingredient.setId(Integer.parseInt(cursor.getString(cursor.getColumnIndex(INGREDIENTS_KEY_ID))));
             ingredient.setmIngredient(cursor.getString(cursor.getColumnIndex(INGREDIENT_NAME)));
             ingredient.setmQuantity(Integer.parseInt(cursor.getString(cursor.getColumnIndex(INGREDIENT_QTY))));
+            ingredient.setQtyType(cursor.getString(cursor.getColumnIndex(INGREDIENT_QTYTYPE)));
 
 
         return ingredient;
@@ -130,7 +136,7 @@ public class DataBaseHandler extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getReadableDatabase();
 
         ArrayList<Ingredients> list = new ArrayList<>();
-        Cursor cursor = db.query(TABLE_INGREDIENTS,new String[] {INGREDIENTS_KEY_ID,INGREDIENT_NAME,INGREDIENT_QTY}
+        Cursor cursor = db.query(TABLE_INGREDIENTS,new String[] {INGREDIENTS_KEY_ID,INGREDIENT_NAME,INGREDIENT_QTY,INGREDIENT_QTYTYPE}
                 ,null,
                 null,null,null,null);
 
@@ -140,6 +146,7 @@ public class DataBaseHandler extends SQLiteOpenHelper {
                 ingredient.setId(Integer.parseInt(cursor.getString(cursor.getColumnIndex(INGREDIENTS_KEY_ID))));
                 ingredient.setmIngredient(cursor.getString(cursor.getColumnIndex(INGREDIENT_NAME)));
                 ingredient.setmQuantity(Integer.parseInt(cursor.getString(cursor.getColumnIndex(INGREDIENT_QTY))));
+                ingredient.setQtyType(cursor.getString(cursor.getColumnIndex(INGREDIENT_QTYTYPE)));
                 list.add(ingredient);
             }while(cursor.moveToNext());
         }
@@ -153,6 +160,8 @@ public class DataBaseHandler extends SQLiteOpenHelper {
         values.put(INGREDIENTS_KEY_ID,ingredient.getId());
         values.put(INGREDIENT_NAME, ingredient.getmIngredient());
         values.put(INGREDIENT_QTY, ingredient.getmQuantity());
+        values.put(INGREDIENT_QTYTYPE,ingredient.getQtyType());
+
 
         return db.update(TABLE_INGREDIENTS,values, INGREDIENTS_KEY_ID + "=?",new String[]{String.valueOf(ingredient.getId())});
 
@@ -238,10 +247,6 @@ public class DataBaseHandler extends SQLiteOpenHelper {
         return cursor.getCount();
     }
 
-//    private static final String RKEY_ID = "id";
-//    private static final String RECIPE_INGREDIENT = "recipe_ingredient";
-//    private static final String RECIPE_QTY = "recipe_QTY";
-//    private static final String RECIPE_ID = "recipe_id";
 
     //Recipe Ingredient Section
     public void addRecipeIngredients(int id, ArrayList<Ingredients> list){
@@ -252,6 +257,7 @@ public class DataBaseHandler extends SQLiteOpenHelper {
             values.put(RECIPE_ID, id);
             values.put(RECIPE_INGREDIENT, list.get(i).getmIngredient());
             values.put(RECIPE_QTY,list.get(i).getmQuantity());
+            values.put(RECIPE_QTYTYPE,list.get(i).getQtyType());
             db.insert(TABLE_RECIPE_INGREDIENTS,null,values);
         }
     }
@@ -261,16 +267,17 @@ public class DataBaseHandler extends SQLiteOpenHelper {
 
         ArrayList<Ingredients> list = new ArrayList<>();
 
-        Cursor cursor = db.query (TABLE_RECIPE_INGREDIENTS, new String[]{RECIPE_KEY_ID, RECIPE_INGREDIENT,RECIPE_QTY}, RECIPE_ID + "=?",
+        Cursor cursor = db.query (TABLE_RECIPE_INGREDIENTS, new String[]{RECIPE_KEY_ID, RECIPE_INGREDIENT,RECIPE_QTY,RECIPE_QTYTYPE}, RECIPE_ID + "=?",
                 new String[]{String.valueOf(id)},null,null,null);
 
 
         if(cursor.moveToFirst())
             do {
                 Ingredients ingredient = new Ingredients();
-              //  ingredient.setId(Integer.parseInt(cursor.getString(cursor.getColumnIndex(RE))));
+                ingredient.setId(Integer.parseInt(cursor.getString(cursor.getColumnIndex(RECIPE_KEY_ID))));
                 ingredient.setmIngredient(cursor.getString(cursor.getColumnIndex(RECIPE_INGREDIENT)));
                 ingredient.setmQuantity(Integer.parseInt(cursor.getString(cursor.getColumnIndex(RECIPE_QTY))));
+                ingredient.setQtyType(cursor.getString(cursor.getColumnIndex(RECIPE_QTYTYPE)));
 
                 list.add(ingredient);
             }while(cursor.moveToNext());

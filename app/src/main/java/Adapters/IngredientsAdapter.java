@@ -50,7 +50,7 @@ public class IngredientsAdapter extends RecyclerView.Adapter<IngredientsAdapter.
                 int quantity = mList.get(position).getmQuantity();
                 quantity +=1;
                 mList.get(position).setmQuantity(quantity);
-                addItem(position);
+                updateItem(position);
                 holder.Qty.setText(Integer.toString(mList.get(position).getmQuantity()));
 
 
@@ -60,14 +60,23 @@ public class IngredientsAdapter extends RecyclerView.Adapter<IngredientsAdapter.
             @Override
             public void onClick(View view) {
                 int index = mList.get(position).getId();
-                deleteItem(index);
-                mList.remove(position);
-                notifyDataSetChanged();
+                if(mList.get(position).getmQuantity() == 0){
+                    deleteItem(index);
+                    mList.remove(position);
+                    notifyDataSetChanged();
+                }
+                else {
+                    mList.get(position).removeQuantity(1);
+                    holder.Qty.setText(Integer.toString(mList.get(position).getmQuantity()));
+                    updateItem(position);
+                }
+
 
 
             }
         });
         holder.Ingredient.setText(mList.get(position).getmIngredient());
+        holder.qtyType.setText(mList.get(position).getQtyType());
 
         holder.Qty.setText(Integer.toString(mList.get(position).getmQuantity()));
     }
@@ -81,19 +90,22 @@ public class IngredientsAdapter extends RecyclerView.Adapter<IngredientsAdapter.
     public static class MyViewHolder extends RecyclerView.ViewHolder{
         public TextView Ingredient;
         public TextView Qty;
+        public TextView qtyType;
         public Button add;
         public Button remove;
+
         public MyViewHolder(View v){
             super(v);
             add = v.findViewById(R.id.ingredientsAdd);
             remove = v.findViewById(R.id.ingredientsRemove);
+            qtyType = v.findViewById(R.id.qtyType);
             Ingredient = v.findViewById(R.id.ingredientsItemText);
             Qty = v.findViewById(R.id.ingredientsQuantityText);
 
         }
     }
 
-    public void addItem(int id){
+    public void updateItem(int id){
         DataBaseHandler db = new DataBaseHandler(mContext);
         Ingredients ingredients = mList.get(id);
         db.updateIngredient(ingredients);

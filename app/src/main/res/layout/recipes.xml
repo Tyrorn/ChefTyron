@@ -3,11 +3,20 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:shadowColor="#000"
+    android:shadowDx="30"
+    android:shadowDy="60"
+    android:shadowRadius="50">
 
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" >
+        android:layout_height="wrap_content"
+
+        android:layout_marginTop="1dp"
+        android:layout_marginLeft="3dp"
+        android:layout_marginEnd="3dp"
+        android:layout_marginRight="3dp">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -15,8 +24,8 @@
 
             <CheckBox
                 android:id="@+id/recipeCheckBox"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="45dp"
+                android:layout_height="31dp"
                 android:padding="10dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -27,13 +36,14 @@
 
             <TextView
                 android:id="@+id/recipeName"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="155dp"
+                android:layout_height="26dp"
                 android:layout_toEndOf="@+id/recipeCheckBox"
                 android:layout_toRightOf="@+id/recipeCheckBox"
                 android:gravity="center_vertical"
-                android:paddingTop="10dp"
+
                 android:text="TextView"
+                android:textColor="#000"
                 android:textSize="15sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -48,9 +58,10 @@
                 android:layout_height="wrap_content"
                 android:text="Serves: "
                 android:textStyle="italic"
+
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.626"
+                app:layout_constraintHorizontal_bias="0.658"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -60,7 +71,7 @@
                 android:layout_height="16dp"
                 android:layout_toEndOf="@+id/recipeName"
                 android:layout_toRightOf="@+id/recipeName"
-
+                android:textColor="#000"
                 android:text="Te"
                 android:textStyle="italic"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -85,9 +96,9 @@
 
             <TextView
                 android:id="@+id/recipeTime"
-                android:layout_width="43dp"
-                android:layout_height="19dp"
-
+                android:layout_width="27dp"
+                android:layout_height="17dp"
+                android:textColor="#000"
 
                 android:text="Te"
                 android:textStyle="italic"

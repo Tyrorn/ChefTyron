@@ -1,5 +1,12 @@
 <resources>
     <string name="app_name">ChefTyron</string>
+    <string-array name="measurements_array">
+        <item>"tsp"</item>
+        <item>"tbsp"</item>
+        <item>"ml"</item>
+        <item>"mg"</item>
+        <item>"unit"</item>
+    </string-array>
     <string name="action_settings">Settings</string>
     <!-- Strings used for fragments for navigation -->
     <string name="first_fragment_label">First Fragment</string>
@@ -41,4 +48,5 @@
     <string name="addRecipe">Add Recipe</string>
     <string name="createGroceries">Create Groceries List</string>
     <string name="title_activity_create_recipe">createRecipe</string>
+    <string name="title_activity_recipe_screen">RecipeScreen</string>
 </resources>

@@ -1,5 +1,6 @@
 package com.example.cheftyron;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 
@@ -14,42 +15,54 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.PersistableBundle;
+import android.view.LayoutInflater;
 import android.view.View;
 
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 
 import android.widget.EditText;
 
+import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
 
 import Adapters.IngredientsAdapter;
 import Adapters.RecipeAdapter;
+import Adapters.recipeIngredientAdapter;
 import Database.DataBaseHandler;
 import Models.Ingredients;
+import Models.InitialRecipes;
 import Models.Recipe;
 import Models.onCheckClick;
 
 
-public class MainActivity extends AppCompatActivity implements onCheckClick{
+public class MainActivity extends AppCompatActivity implements onCheckClick, RecipeAdapter.onRecipeListener {
 
     private ArrayList<Ingredients> ingredientsList = new ArrayList<>();
     private RecyclerView rv;
     private IngredientsAdapter ingredientsAdapter;
     private AlertDialog.Builder popupBuilder;
     private AlertDialog popup;
+    private TextView welcome;
 
     private ArrayList<Recipe> recipesList = new ArrayList<>();
     private RecipeAdapter recipeAdapter;
 
     private ArrayList<Ingredients> tempGroceriesList = new ArrayList<>();
     private ArrayList<Ingredients> groceriesList = new ArrayList<>();
-    private IngredientsAdapter groceriesAdapter;
+    private recipeIngredientAdapter groceriesAdapter;
 
     private int adapterUsed;
+
+    private Spinner spinner;
+    private String[] measurements =new String[]{"Tsp", "Tbsp", "ml", "mg","unit"};
+    private String qtyType ;
 
 
     private FloatingActionButton fab ;
@@ -66,6 +79,8 @@ public class MainActivity extends AppCompatActivity implements onCheckClick{
         setSupportActionBar(toolbar);
         db = new DataBaseHandler(this);
         rv = findViewById(R.id.rViewMain);
+        welcome = findViewById(R.id.Welcome);
+        welcome.setVisibility(View.VISIBLE);
 
         // Pull data for ingredients----------------------------------------------------
         ArrayList<Ingredients> temp = new ArrayList<>();
@@ -75,13 +90,26 @@ public class MainActivity extends AppCompatActivity implements onCheckClick{
             ingredients.setId(i.getId());
             ingredients.setmIngredient(i.getmIngredient());
             ingredients.setmQuantity(i.getmQuantity());
+            ingredients.setQtyType(i.getQtyType());
             ingredientsList.add(ingredients);
         }
+
+
 
 
         //Pull Recipes database------------------------------------
         ArrayList<Recipe> temp1;
         temp1 = db.getAllRecipes();
+        if (db.getRecipesCount() <=0){
+            InitialRecipes recipes = new InitialRecipes();
+            for (int i=0;i<recipes.getRecipeCount();i++){
+                Recipe recipe;
+                recipe = recipes.getRecipe(i);
+                db.addRecipe(recipe);
+                db.addRecipeIngredients(db.getRecipe(i+1).getId(),recipe.getIngredientsList());
+            }
+
+        }
         for (int i=0; i<temp1.size();i++){
             Recipe recipe = new Recipe();
             recipe.setId(temp1.get(i).getId());
@@ -92,12 +120,14 @@ public class MainActivity extends AppCompatActivity implements onCheckClick{
             recipe.setIngredientsList(db.getRecipeIngredients(recipe.getId()));
             recipesList.add(recipe);
         }
+
         //------------------------------------------------------------
 
         //set Adapters
-        groceriesAdapter = new IngredientsAdapter(this,groceriesList);
+       // groceriesAdapter = new IngredientsAdapter(this,groceriesList);
+        groceriesAdapter = new recipeIngredientAdapter(this,groceriesList);
         ingredientsAdapter = new IngredientsAdapter(this, ingredientsList);
-        recipeAdapter = new RecipeAdapter(this, recipesList, this);
+        recipeAdapter = new RecipeAdapter(this, recipesList, this,this);
         //------------------------------------------------------------
 
         rv.setLayoutManager(new LinearLayoutManager(this));
@@ -118,6 +148,11 @@ public class MainActivity extends AppCompatActivity implements onCheckClick{
                     break;
             }
         }
+        Intent intent = getIntent();
+        if(intent.getIntExtra("loc",0) == 2){
+            recipesInit();
+
+        };
         //---------------------------------------------
         init();
     }
@@ -126,6 +161,8 @@ public class MainActivity extends AppCompatActivity implements onCheckClick{
     void init(){
 
         //Traversing Adapters ----------------------------------------------------------------------
+
+
 
         //Ingredients--------------------------------------
         Button ingredients = findViewById(R.id.ingredientsButton);
@@ -140,6 +177,7 @@ public class MainActivity extends AppCompatActivity implements onCheckClick{
         recipe.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view){
+
                 recipesInit();
             }
         });
@@ -148,6 +186,7 @@ public class MainActivity extends AppCompatActivity implements onCheckClick{
         groceries.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view){
+
 
                 groceriesInit();
 
@@ -161,6 +200,8 @@ public class MainActivity extends AppCompatActivity implements onCheckClick{
         //Toast.makeText(MainActivity.this,"whyyy!!!",Toast.LENGTH_SHORT).show();
         rv.setAdapter(groceriesAdapter);
         adapterUsed =3;
+        welcome.setVisibility(View.INVISIBLE);
+
         Button button = findViewById(R.id.centerButton);
         button.setVisibility(View.INVISIBLE);
         fab = findViewById(R.id.fab);
@@ -178,6 +219,7 @@ public class MainActivity extends AppCompatActivity implements onCheckClick{
         rv.setAdapter(recipeAdapter);
         adapterUsed =2;
         recipeAdapter.notifyDataSetChanged();
+        welcome.setVisibility(View.INVISIBLE);
 
         fab = findViewById(R.id.fab);
         fab.setVisibility(View.VISIBLE);
@@ -203,6 +245,7 @@ public class MainActivity extends AppCompatActivity implements onCheckClick{
 
     //Use Ingredients adapter for the Main activity RecyclerView------------------------------------
     void ingredientsInit(){
+        welcome.setVisibility(View.INVISIBLE);
         adapterUsed =1;
 
         rv.setAdapter(ingredientsAdapter);
@@ -225,14 +268,37 @@ public class MainActivity extends AppCompatActivity implements onCheckClick{
 
 
     // Pop up to add more ingredients to current inventory -----------------------------------------
-    private void createIngredientsPopupDialog(){
+   public void createIngredientsPopupDialog(){
         final EditText groceryItem,qty;
+
+
 
         popupBuilder = new AlertDialog.Builder(this);
         View view = getLayoutInflater().inflate(R.layout.ingredientspopup,null);
+//        final LayoutInflater layout = (LayoutInflater)this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         groceryItem = view.findViewById(R.id.ingredientsAddText);
         qty = view.findViewById(R.id.ingredientsQuantityText);
         Button add = view.findViewById(R.id.popupAdd);
+
+        spinner = (Spinner)view.findViewById(R.id.popUpSpinner);
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(view.getContext(),R.array.measurements_array,R.layout.support_simple_spinner_dropdown_item);
+//        ArrayAdapter<String> adapter = new ArrayAdapter<String>(view.getContext(),R.layout.ingredientspopup,R.layout.,measurements);
+        adapter.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
+        spinner.setAdapter(adapter);
+
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+
+                qtyType = measurements[i];
+            }
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+
+        });
+
 
         popupBuilder.setView(view);
         popup = popupBuilder.create();
@@ -243,19 +309,23 @@ public class MainActivity extends AppCompatActivity implements onCheckClick{
             public void onClick(View v){
                 boolean unique =true;
                 try {
+                    //if grocery name is empty
                     if(groceryItem.getText().toString().equals("")){
                         Toast.makeText(MainActivity.this, "Please enter in an ingredient", Toast.LENGTH_LONG).show();
                     }
                     else {
+                        //Check if grocery is unique to avoid double ups
                         for (int i = 0; i < ingredientsList.size(); i++) {
                             if (groceryItem.getText().toString().equals(ingredientsList.get(i).getmIngredient())) {
                                 unique = false;
                                 break;
                             }
                         }
+                        //if unique
                         if (unique) {
                            // ingredientCount +=1;
                             Ingredients ingredient = new Ingredients(groceryItem.getText().toString(), Integer.parseInt(qty.getText().toString()));
+                            ingredient.setQtyType(qtyType);
                             ingredientsList.add(ingredient);
                             db.addIngredient(ingredient);
                             ingredientsAdapter.notifyDataSetChanged();
@@ -279,10 +349,6 @@ public class MainActivity extends AppCompatActivity implements onCheckClick{
 
     // --------------------------------------------------------------------------------------------
 
-    //Recipe Methods
-//    public void createRecipe(){
-//        EditText
-//    }
 
     //Grocery stuff--------------------------------
 
@@ -301,6 +367,7 @@ public class MainActivity extends AppCompatActivity implements onCheckClick{
     @Override
     public void onClick(ArrayList<Ingredients> ingredients, boolean b) {
         if (b){
+            //add ingredients to groceries list
             boolean found = false;
             for (int i =0; i<ingredients.size();i++){
                 for (int j =0; j<tempGroceriesList.size();j++){
@@ -310,13 +377,15 @@ public class MainActivity extends AppCompatActivity implements onCheckClick{
                     }
                 }
                 if (!found) {
-                    tempGroceriesList.add(new Ingredients(ingredients.get(i).getmIngredient(),ingredients.get(i).getmQuantity(),0));
+                    tempGroceriesList.add(new Ingredients(ingredients.get(i).getmIngredient(),ingredients.get(i).getmQuantity(),0, ingredients.get(i).getQtyType()));
+
                 }
             }
 
-//            Toast.makeText(this, Integer.toString(tempGroceriesList.get(0).getmQuantity()), Toast.LENGTH_LONG).show();
+
         }
         else{
+            //remove ingredients from groceries list
             for (int i =0; i<ingredients.size();i++){
                 for (int j =0; j<tempGroceriesList.size();j++){
                     if (ingredients.get(i).getmIngredient().equals(tempGroceriesList.get(j).getmIngredient())){
@@ -342,14 +411,14 @@ public class MainActivity extends AppCompatActivity implements onCheckClick{
                         int index =findItem(groceriesList,tempGroceriesList.get(i).getmIngredient());
                         if ( index != -1){
                             if(groceriesList.size()== 0){
-                                groceriesList.add(new Ingredients(tempGroceriesList.get(i).getmIngredient(),difference,0));
+                                groceriesList.add(new Ingredients(tempGroceriesList.get(i).getmIngredient(),difference,0, tempGroceriesList.get(i).getQtyType()));
                             }
                             else{
                                 groceriesList.get(index).addQuantity(difference);
                             }
                         }
                         else{
-                            groceriesList.add(new Ingredients(tempGroceriesList.get(i).getmIngredient(),difference,0));
+                            groceriesList.add(new Ingredients(tempGroceriesList.get(i).getmIngredient(),difference,0, tempGroceriesList.get(i).getQtyType()));
                         }
                     }
 
@@ -367,7 +436,7 @@ public class MainActivity extends AppCompatActivity implements onCheckClick{
 
                 }
                 else{
-                    groceriesList.add(new Ingredients(tempGroceriesList.get(i).getmIngredient(),tempGroceriesList.get(i).getmQuantity(),0));
+                    groceriesList.add(new Ingredients(tempGroceriesList.get(i).getmIngredient(),tempGroceriesList.get(i).getmQuantity(),0, tempGroceriesList.get(i).getQtyType()));
                 }
             }
         }
@@ -425,4 +494,10 @@ public class MainActivity extends AppCompatActivity implements onCheckClick{
     }
 
 
+    @Override
+    public void onRecipeClick(int position) {
+        Intent intent = new Intent(this, RecipeScreen.class);
+        intent.putExtra("pos",position+1);
+        startActivity(intent);
+    }
 }

@@ -19,7 +19,7 @@ public class Recipe {
         this.ingredientsList = ingredients;
         this.instructions = instructions;
         this.servingSize = size;
-        this.servingSize = time;
+        this.time = time;
        // this.id = id;
     }
 

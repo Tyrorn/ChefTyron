@@ -13,8 +13,11 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -34,6 +37,8 @@ public class createRecipe extends AppCompatActivity {
     //Views
     private Button addRecipe;
     private EditText rname,rsize,rtime,rinstructions;
+    private String[] measurements =new String[]{"Tsp", "Tbsp", "ml", "mg","Unit"};
+    private String qtyType;
 
 
     @Override
@@ -116,11 +121,32 @@ public class createRecipe extends AppCompatActivity {
     private void createIngredientsPopupDialog(){
         final EditText groceryItem,qty;
 
+        Spinner spinner;
+
         popupBuilder = new AlertDialog.Builder(this);
         View view = getLayoutInflater().inflate(R.layout.ingredientspopup,null);
         groceryItem = view.findViewById(R.id.ingredientsAddText);
         qty = view.findViewById(R.id.ingredientsQuantityText);
         Button add = view.findViewById(R.id.popupAdd);
+
+        spinner = (Spinner)view.findViewById(R.id.popUpSpinner);
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(view.getContext(),R.array.measurements_array,R.layout.support_simple_spinner_dropdown_item);
+        adapter.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
+        spinner.setAdapter(adapter);
+
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+
+                qtyType = measurements[i];
+            }
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+
+        });
+
 
         popupBuilder.setView(view);
         popup = popupBuilder.create();
@@ -144,6 +170,7 @@ public class createRecipe extends AppCompatActivity {
                         if (unique) {
                             // ingredientCount +=1;
                             Ingredients ingredient = new Ingredients(groceryItem.getText().toString(), Integer.parseInt(qty.getText().toString()));
+                            ingredient.setQtyType(qtyType);
                             ingredients_list.add(ingredient);
                             ingredientsAdapter.notifyDataSetChanged();
                             Toast.makeText(createRecipe.this, groceryItem.getText().toString() + " added", Toast.LENGTH_LONG).show();
